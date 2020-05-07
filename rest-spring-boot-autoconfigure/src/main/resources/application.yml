@@ -1,0 +1,9 @@
+component:
+  restTemplate:
+    connectTimeout: 1000
+    connectionRequestTimeout: 500
+    readTimeout: 10000
+    logging:
+      enabled: true
+    maxTotal: 500
+    defaultMaxPerRoute: 300

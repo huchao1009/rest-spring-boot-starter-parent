@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+//group = 'com.opensource.component'
+//version = '1.0.0-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-autoconfigure:2.2.6.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-web:2.2.6.RELEASE'
+    compile 'org.springframework.cloud:spring-cloud-commons:2.1.1.RELEASE'
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.10'
+    compile 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+}
