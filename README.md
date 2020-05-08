@@ -15,16 +15,16 @@
 
 ###### gradle：
 ```groovy
-    implementation 'com.opensource.component:rest-spring-boot-starter:1.0.0-SNAPSHOT'
+implementation 'com.opensource.component:rest-spring-boot-starter:1.0.0-SNAPSHOT'
 ```
 
 ###### maven:
 ```xml
-    <dependency>
-          <groupId>com.opensource.component</groupId>
-          <artifactId>rest-spring-boot-starter</artifactId>
-          <version>1.0.0-SNAPSHOT</version>
-    </dependency>
+<dependency>
+      <groupId>com.opensource.component</groupId>
+      <artifactId>rest-spring-boot-starter</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
+</dependency>
 ```
 ### 三、引入配置
 
@@ -59,10 +59,86 @@ gradle -x test clean build publish
 ### 五、使用例子
 
 ```java
-Map<String,String> map = new HashMap();
-map.put("start","1");
-map.put("page","5");
-Notice notice = restTemplate.getForObject("http://fantj.top/notice/list/"
-        , Notice.class,map);
+@RunWith(SpringRunner.class)
+@SpringBootTest
+//由于是Web项目，Junit需要模拟ServletContext，因此我们需要给我们的测试类加上@WebAppConfiguration。
+@WebAppConfiguration
+public class RestDemoApplicationTest {
+    @Autowired
+    private RestTemplate restTemplate;
 
+    @Test
+    public void testGetForObject() {
+        // 使用方法一，不带参数
+        String url = "http://127.0.0.1:8080/poets/get?id=30";
+        Poets res = restTemplate.getForObject(url, Poets.class);
+        System.out.println(res);
+
+
+        // 使用方法一，传参替换
+        url = "http://127.0.0.1:8080/poets/get?id={?}";
+        res = restTemplate.getForObject(url, Poets.class, "30");
+        System.out.println(res);
+
+        // 使用方法二，map传参
+        url = "http://127.0.0.1:8080/poets/get?id={id}";
+        Map<String, Object> params = new HashMap<>();
+        params.put("id", 30L);
+        res = restTemplate.getForObject(url, Poets.class, params);
+        System.out.println(res);
+
+        // 使用方法三，URI访问
+        URI uri = URI.create("http://127.0.0.1:8080/poets/get?id=30");
+        res = restTemplate.getForObject(uri, Poets.class);
+        System.out.println(res);
+    }
+
+    @Test
+    public void testGetForEntity() {
+        String url = "http://127.0.0.1:8080/poets/get?id=30";
+        ResponseEntity<Poets> res = restTemplate.getForEntity(url, Poets.class);
+        System.out.println(res);
+    }
+
+    @Test
+    public void testPost() {
+        String url = "http://localhost:8080/poets/add";
+        int id = 111;
+        String name = "孙权";
+
+        MultiValueMap<String, String> request = new LinkedMultiValueMap<>();
+        request.add("id", id+"");
+        request.add("name", name);
+
+        // 使用方法三
+        URI uri = URI.create(url);
+        String result = restTemplate.postForObject(uri, request, String.class);
+        System.out.println(result);
+
+        // 使用方法一
+        result = restTemplate.postForObject(url, request, String.class);
+        System.out.println(result);
+
+        // 使用方法一，但是结合表单参数和uri参数的方式，其中uri参数的填充和get请求一致
+        request.clear();
+        request.add("id", id+"");
+        result = restTemplate.postForObject(url + "?name={?}", request, String.class, name);
+        System.out.println(result);
+
+        // 使用方法二
+        Map<String, String> params = new HashMap<>();
+        params.put("name", name);
+        result = restTemplate.postForObject(url + "?name={name}", request, String.class, params);
+        System.out.println(result);
+    }
+
+}
 ```
+
+日志输出示例：
+```shell
+request uri : http://127.0.0.1:8080/poets/get?id=30
+request headers : [Accept:"application/json, application/*+json", Content-Length:"0"]
+request body : 
+response status code : 200 OK
+response body: {"id":30,"name":"李从善","createdAt":"2014-06-02T03:48:26.000+0000","updatedAt":"2014-06-02T03:48:26.000+0000"}```

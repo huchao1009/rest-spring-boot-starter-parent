@@ -1,3 +1,5 @@
 rootProject.name = 'rest-spring-boot-starter-parent'
 include 'rest-spring-boot-starter'
 include 'rest-spring-boot-autoconfigure'
+include 'rest-demo'
+

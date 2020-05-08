@@ -8,5 +8,5 @@ plugins {
 sourceCompatibility = '1.8'
 
 dependencies {
-    compile 'com.opensource.component:rest-logs-spring-boot-autoconfigure:1.0.0-SNAPSHOT'
+    compile 'com.opensource.component:rest-spring-boot-autoconfigure:1.0.0-SNAPSHOT'
 }
