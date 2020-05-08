@@ -43,7 +43,7 @@ component:
 
 
 #### 2、参数说明：
-- connectionRequestTimeout：从连接池获取连接的timeout，默认值：1000ms
+- connectionRequestTimeout：从连接池获取连接的timeout，默认值：500ms
 - connectTimeout：客户端和服务器建立连接的timeout，默认值：1000ms
 - readTimeout：客户端从服务器读取数据的timeout，超出后会抛出SocketTimeOutException，默认值：10000ms
 - logging.enabled: 请求、响应日志记录开关，默认值：true
